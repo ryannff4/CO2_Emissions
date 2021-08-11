@@ -1,5 +1,6 @@
 import geopandas as gpd
 import pandas as pd
+import json
 
 shapefile = 'data/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp'
 datafile = 'data/co2_data.csv'
@@ -25,3 +26,9 @@ df_2016 = df[['Country Code', '2016']]  # obtain data for every country for the 
 # merge gdf and df
 merged = gdf.merge(df_2016, left_on='country_code', right_on='Country Code')
 # print(merged)
+
+# read data into json
+merged_json = json.loads(merged.to_json())
+
+# convert to string-like object
+json_data = json.dumps(merged_json)
