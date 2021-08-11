@@ -44,16 +44,16 @@ geosource = GeoJSONDataSource(geojson=json_data)
 palette = Category20b[20]
 
 # Instantiate LinearColorMapper that linearly maps numbers in a range, into a sequence of colors.
-color_mapper = LinearColorMapper(palette=palette, low=0, high=35000000)
+color_mapper = LinearColorMapper(palette=palette, low=0, high=10000000)
 
 # Define custom tick labels for color bar.
 tick_labels = {}
 for x in range(21):
-    val = x * 1750000
-    tick_labels[str(val)] = str(val)
+    val = x * 500000
+    tick_labels[str(val)] = str(val) + '+'
     
 # Create color bar.
-color_bar = ColorBar(color_mapper=color_mapper, label_standoff=20, width=500, height=20,
+color_bar = ColorBar(color_mapper=color_mapper, label_standoff=20, width=900, height=20,
                      border_line_color=None, location=(0, 0), orientation='horizontal',
                      major_label_overrides=tick_labels)
 # Create figure object.
