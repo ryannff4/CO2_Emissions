@@ -1,6 +1,10 @@
 import geopandas as gpd
 import pandas as pd
 import json
+from bokeh.io import output_notebook, show, output_file
+from bokeh.plotting import figure
+from bokeh.models import GeoJSONDataSource, LinearColorMapper, ColorBar
+from bokeh.palettes import brewer, Category20b
 
 shapefile = 'data/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp'
 datafile = 'data/co2_data.csv'
@@ -32,3 +36,12 @@ merged_json = json.loads(merged.to_json())
 
 # convert to string-like object
 json_data = json.dumps(merged_json)
+
+# input geoJSON source containing features for plotting
+geosource = GeoJSONDataSource(geojson=json_data)
+
+# define a sequential multi-color palette
+palette = Category20b[20]
+
+# Instantiate LinearColorMapper that linearly maps numbers in a range, into a sequence of colors.
+color_mapper = LinearColorMapper(palette=palette, low=0, high=35000000)
