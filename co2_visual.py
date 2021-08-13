@@ -27,9 +27,13 @@ df = pd.read_csv(datafile, skiprows=4)  # first 4 rows of csv file are empty
 df_2018 = df[['Country Code', '2018']]  # obtain data for every country for the specified year
 # print(df_2018)
 
-# merge gdf and df
-merged = gdf.merge(df_2018, left_on='country_code', right_on='Country Code')
+# left-merge gdf and df to preserve every row in gdf in the case of countries are missing in the csv file for the specified year
+merged = gdf.merge(df_2018, left_on='country_code', right_on='Country Code', how='left')
 # print(merged)
+
+# replace NaN values to string 'no data'
+# without this replacement, if a country has no value for a specific year, it will be incorrectly color coded with a color corresponding to 0
+merged.fillna('No data', inplace=True)
 
 # read data into json
 merged_json = json.loads(merged.to_json())
@@ -42,9 +46,11 @@ geosource = GeoJSONDataSource(geojson=json_data)
 
 # define a sequential multi-color palette
 palette = Category20b[20]
+print(palette)
 
 # Instantiate LinearColorMapper that linearly maps numbers in a range, into a sequence of colors.
-color_mapper = LinearColorMapper(palette=palette, low=0, high=10000000)
+# Also input a grey color for nan_color, i.e. the countries with no data for the year
+color_mapper = LinearColorMapper(palette=palette, low=0, high=10000000, nan_color='#d9d9d9')
 
 # Define custom tick labels for color bar.
 tick_labels = {}
