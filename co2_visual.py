@@ -22,7 +22,7 @@ gdf.head()
 gdf = gdf.drop(gdf.index[159])
 
 # read csv file into data frame
-df = pd.read_csv(datafile, usecols=['iso_code', 'year', 'c02'])
+df = pd.read_csv(datafile, usecols=['iso_code', 'year', 'co2'])
 df.head()
 
 
