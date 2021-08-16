@@ -22,18 +22,14 @@ gdf.head()
 gdf = gdf.drop(gdf.index[159])
 
 # read csv file into data frame
-df = pd.read_csv(datafile, usecols=[0, 1, 2, 3])
-# df.head()
-print('printing after having created dataframe from co2 data')
-# print(df.columns)
-# print(df[df['year']==2015])
+df = pd.read_csv(datafile, usecols=['iso_code', 'year', 'c02'])
+df.head()
+
 
 # function to return json_data for the year selected by the user
 def json_data(selectedYear):
     yr = selectedYear
-    # print(df['year']==yr)
-    df_year = df[df['year'] == yr]  # obtain data for every country for the specified year
-    # print(df_year)
+    df_year = df[df['year'] == yr]  # obtain data for every country for the selected year
 
     # left-merge gdf and df to preserve every row in gdf in the case of countries are missing in the csv file for the specified year
     merged = gdf.merge(df_year, left_on='country_code', right_on='iso_code', how='left')
@@ -51,7 +47,7 @@ def json_data(selectedYear):
 
 
 # input geoJSON source containing features for plotting
-geosource = GeoJSONDataSource(geojson=json_data(2019))  #initialize with most recent year of data
+geosource = GeoJSONDataSource(geojson=json_data(2019))  # initialize with most recent year of data 2019
 
 # define a sequential multi-color palette
 palette = Category20b[20]
@@ -112,5 +108,4 @@ slider.on_change('value', update_plot)
 layout = column(p, widgetbox(slider))
 curdoc().add_root(layout)
 
-# Display figure.
 show(layout)
